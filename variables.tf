@@ -625,7 +625,8 @@ variable "netskope" {
     - `gateway`: `ha_enabled`; portal objects and DNS servers (`gateway_name`, `gateway_policy`, `gateway_model`,
       `gateway_role`, `dns_*`) are only used with `portal_automation = true`.
     - `instance`: `instance_type` (c5.xlarge), `ami_id` (required in console mode; wins over the `ami_name` lookup),
-      `root_volume_size` / `root_volume_type` (38 GB gp3, as in the console template).
+      `root_volume_size` (null = size of the AMI snapshot; the R6.3.x gateway AMI needs at least 80 GB, a smaller value
+      fails with InvalidBlockDeviceMapping) / `root_volume_type` (gp3).
     - `ssh_allowed_cidrs` / `https_allowed_cidrs`: CIDRs allowed to reach TCP 22 / 443 on the WAN interface (empty = closed).
     - `ssh_password_auth`: enable SSH password login via cloud-init (needs `netskope_gateway_password`).
   EOF
@@ -706,7 +707,7 @@ variable "netskope" {
       ami_id           = optional(string)
       ami_name         = optional(string, "Infiot-Edge_R1.4.109")
       ami_owner        = optional(string, "aws-marketplace")
-      root_volume_size = optional(number, 38)
+      root_volume_size = optional(number) # null = size of the AMI snapshot (the R6.3.x gateway AMI needs >= 80 GB)
       root_volume_type = optional(string, "gp3")
     }), {})
     ssh_allowed_cidrs   = optional(list(string), [])

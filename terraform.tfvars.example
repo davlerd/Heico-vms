@@ -447,7 +447,7 @@ netskope = {
   instance = {
     ami_id = "ami-xxxxxxxxxxxxxxxxx" # TODO: Netskope gateway AMI ID shown in the console / AWS Marketplace for `region`
     # instance_type    = "c5.xlarge"
-    # root_volume_size = 38
+    # root_volume_size = 80 # default: size of the AMI snapshot (the R6.3.x gateway AMI needs >= 80 GB)
     # root_volume_type = "gp3"
   }
 

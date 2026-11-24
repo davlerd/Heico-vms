@@ -443,7 +443,7 @@ netskope = {
   instance = {
     ami_id = "ami-07bb168bd669677aa" # Netskope unified SASE virtual gateway (us-east-1)
     # instance_type    = "c5.xlarge"
-    # root_volume_size = 38
+    # root_volume_size = 80 # default: size of the AMI snapshot (this AMI needs >= 80 GB)
     # root_volume_type = "gp3"
   }
 

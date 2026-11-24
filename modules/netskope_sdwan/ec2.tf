@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # Gateway instance (Netskope SD-WAN / Unified SASE Gateway AMI from AWS Marketplace).
 # Ported from the `aws_ec2` module and aligned with the greenfield template downloaded
-# from the Netskope console (explicit AMI ID, c5.xlarge, 38 GB gp3 root volume, cloud-init password).
+# from the Netskope console (explicit AMI ID, c5.xlarge, gp3 root volume, cloud-init password).
 #------------------------------------------------------------------------------
 
 data "aws_ami" "netskope_gw" {
