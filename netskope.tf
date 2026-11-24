@@ -13,7 +13,7 @@ module "netskope_sdwan" {
   tags         = var.global_tags
   ssh_key_name = var.ssh_key_name
 
-  tenant            = var.netskope.tenant
+  tenant            = merge(var.netskope.tenant, { tenant_url = local.netskope_tenant_url })
   portal_automation = var.netskope.portal_automation
   vpc               = var.netskope.vpc
   gateway           = var.netskope.gateway

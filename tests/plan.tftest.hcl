@@ -123,8 +123,11 @@ run "vpc_outside_address_space_is_rejected" {
     netskope = {
       instance = { ami_id = "ami-0123456789abcdef0" }
       vpc = {
-        cidr               = "10.50.0.0/24" # outside 10.103.0.0/16
-        primary_gw_subnets = { ge1 = { subnet_cidr = "10.50.0.0/28" } }
+        cidr = "10.50.0.0/24" # outside 10.103.0.0/16
+        primary_gw_subnets = {
+          ge1 = { subnet_cidr = "10.50.0.0/28" }
+          ge2 = { subnet_cidr = "10.50.0.16/28" }
+        }
       }
     }
   }
@@ -165,6 +168,45 @@ run "console_mode_requires_ami_id" {
         cidr               = "10.103.1.0/24"
         primary_gw_subnets = { ge1 = { subnet_cidr = "10.103.1.0/28" } }
       }
+    }
+  }
+
+  expect_failures = [var.netskope]
+}
+
+run "tenant_url_path_is_ignored" {
+  command = plan
+
+  variables {
+    netskope = {
+      tenant = { tenant_id = "heicocorp", tenant_url = "https://heicocorp.infiot.net/bwan/" }
+      vpc = {
+        cidr = "10.103.1.0/24"
+        primary_gw_subnets = {
+          ge1 = { subnet_cidr = "10.103.1.0/28" }
+          ge2 = { subnet_cidr = "10.103.1.16/28" }
+        }
+      }
+      instance = { ami_id = "ami-0123456789abcdef0" }
+    }
+  }
+
+  assert {
+    condition     = local.netskope_api_url == "https://heicocorp.api.infiot.net"
+    error_message = "The API URL must be built from scheme + host only."
+  }
+}
+
+run "netskope_without_lan_interface_is_rejected" {
+  command = plan
+
+  variables {
+    netskope = {
+      vpc = {
+        cidr               = "10.103.1.0/24"
+        primary_gw_subnets = { ge1 = { subnet_cidr = "10.103.1.0/28" } }
+      }
+      instance = { ami_id = "ami-0123456789abcdef0" }
     }
   }
 

@@ -735,6 +735,10 @@ variable "netskope" {
     error_message = "netskope.ssh_password_auth = true requires netskope_gateway_password."
   }
   validation {
+    condition     = !var.netskope.enabled || length([for k, v in var.netskope.vpc.primary_gw_subnets : k if v != null && v.overlay != "public"]) > 0
+    error_message = "netskope.vpc.primary_gw_subnets needs a LAN interface (an interface whose overlay is not \"public\", e.g. ge2): it hosts the Cloud WAN attachment and the GRE tunnel."
+  }
+  validation {
     condition     = !var.netskope.enabled || contains(keys(var.cloudwan.segments), var.netskope.cloudwan.segment)
     error_message = "netskope.cloudwan.segment must exist in cloudwan.segments."
   }
